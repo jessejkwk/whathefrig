@@ -50,11 +50,14 @@
                 }
             });
         }
+
+        var GoogleVision=data.stream.vision.replace(/#(\S*)/g, '<a class="hash" href="/hash/$1">#$1</a>');
         return (
                 <div data-id={data.stream.id} className="row stream-item">
                     <Author editContent={editContent} deleteContent={deleteContent} reportContent={reportContent} id={data.author.id} author={data.author} contentID={data.stream.id} time={data.stream.date}></Author>
                     <AuthorText id={data.stream.id} data={data.stream}></AuthorText>   
                     <Content id={data.stream.id} data={data.stream}></Content>
+                    <div dangerouslySetInnerHTML={{__html:GoogleVision}}></div>
                     <div className="streamFooter">
                         <Likebox id={data.stream.id}></Likebox>
                         <CommentHint id={data.stream.id} commentCnt={data.stream.comment_cnt}></CommentHint>

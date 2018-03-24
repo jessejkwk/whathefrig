@@ -99,6 +99,7 @@ class Content extends BaseModel
                 . " (select count(*) from Comment where content_id=Content.id) as comment_cnt "
                 . "FROM Content "
                 . "INNER JOIN User ON Content.user_id=User.id "
+                . "LEFT JOIN Content_GoogleVison ON Content.id=Content_GoogleVison.id "
                 . "WHERE  $esql "
                 . "Content.id < $id "
                 . "$orderby LIMIT $show";

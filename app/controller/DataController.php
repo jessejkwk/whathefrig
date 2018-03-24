@@ -120,7 +120,8 @@ class DataController extends BaseController
                     }
                 }
             }
-
+            
+            $std[$i]->stream->vision = (!empty($res->message) ? "#".str_replace(",", " #" ,$res->message) : "");
             $std[$i]->stream->date = (int)$res->date;
             $std[$i]->stream->text = $res->data;
             $std[$i]->stream->id = (int)$res->id;
