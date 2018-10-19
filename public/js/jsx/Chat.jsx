@@ -1,77 +1,82 @@
+var socket;
+
+class ChatBox extends React.Component {
 
 
-    var socket;
-    var ChatBox = React.createClass({
-            getInitialState: function () {
-            return {channel: [], activeUser: []};
-        },
-
-        componentDidMount: function () {
-            
+    constructor(props) {
+        super(props);
+        this.state = {channel: [], activeUser: []};
+    }
 
 
-            try {
-                socket = new WebSocket(notification_server);
+    componentDidMount() {
 
-                socket.onopen = function (msg) {
 
-                    socket.send(JSON.stringify({action: "openroom", auth_cookie: getCookie("auth")}));
-                };
-                socket.onmessage = function (msg) {
-                    
-                    data = JSON.parse(msg.data);
+        try {
+            socket = new WebSocket(notification_server);
 
-                    
-                    this.setState({activeUser: Object.keys(swap(data.activeUsers)), channel: data.channel.default});
-                    var objDiv = document.getElementById("textframe");
-                    objDiv.scrollTop = objDiv.scrollHeight;
-                }.bind(this);
-                socket.onclose = function (msg) {
+            socket.onopen = function (msg) {
 
-                };
-            }
-            catch (ex) {
+                socket.send(JSON.stringify({action: "openroom", auth_cookie: getCookie("auth")}));
+            };
+            socket.onmessage = function (msg) {
 
-                console.log(ex); 
-            }
-            
-        },
-        
-        handleSubmit: function(event) {
-            event.preventDefault();
-            socket.send(JSON.stringify({action: "chat", text: document.getElementById("chatinput").value,  auth_cookie: getCookie("auth")}));
-            document.getElementById("chatinput").value="";
-            var objDiv = document.getElementById("textframe");
-            objDiv.scrollTop = objDiv.scrollHeight;
-        },
-       
-       
-        render: function(){
-            
-            return(
+                data = JSON.parse(msg.data);
+
+
+                this.setState({activeUser: Object.keys(swap(data.activeUsers)), channel: data.channel.default});
+                var objDiv = document.getElementById("textframe");
+                objDiv.scrollTop = objDiv.scrollHeight;
+            }.bind(this);
+            socket.onclose = function (msg) {
+
+            };
+        }
+        catch (ex) {
+
+            console.log(ex);
+        }
+
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        socket.send(JSON.stringify({
+            action: "chat",
+            text: document.getElementById("chatinput").value,
+            auth_cookie: getCookie("auth")
+        }));
+        document.getElementById("chatinput").value = "";
+        var objDiv = document.getElementById("textframe");
+        objDiv.scrollTop = objDiv.scrollHeight;
+    }
+
+
+    render() {
+
+        return (
             <div>
-                
+
                 <div id="chat" className="col-md-9 bounceIn">
                     <div id="textframe">
-                        {this.state.channel.map(function(chat, i) {
-                        chat=Replacehashtags(chat);
-                        return (<p dangerouslySetInnerHTML = {{__html: chat}}/>)
+                        {this.state.channel.map(function (chat, i) {
+                            chat = Replacehashtags(chat);
+                            return (<p dangerouslySetInnerHTML={{__html: chat}}/>)
                         })}
                     </div>
                     <form className="chatForm" onSubmit={this.handleSubmit}>
-                    <input type="text" autoComplete="off" id="chatinput" />
+                        <input type="text" autoComplete="off" id="chatinput"/>
                     </form>
                 </div>
                 <div id="ChatUsers" className="col-md-3">
-                <ul>
-                {this.state.activeUser.map(function(user, i) {
-                    return (<li><span dangerouslySetInnerHTML = {{__html: user}} /></li>)
-                })}
-                </ul>
+                    <ul>
+                        {this.state.activeUser.map(function (user, i) {
+                            return (<li><span dangerouslySetInnerHTML={{__html: user}}/></li>)
+                        })}
+                    </ul>
                 </div>
-                
-                
-                
+
+
             </div>)
-        }
-    });
+    }
+}

@@ -30,9 +30,27 @@ gulp.task('react', function() {
             'public/js/jsx/ShareBox.jsx',
             'public/js/jsx/Notifications.jsx',
             'public/js/jsx/InitStream.jsx'
+
         ]
     )
-    .pipe(babel({"presets": ["react"]}))
+    .pipe(babel({"presets": ["@babel/preset-react"]}))
+    .pipe(concat('react.js'))
+    .pipe(gulp.dest('public/js/'))
+});
+gulp.task('freact', function() {
+    return gulp.src(
+        [
+            'public/js/jsx/Author.jsx',
+            'public/js/jsx/Stream.jsx',
+            'public/js/jsx/Likes.jsx',
+            'public/js/jsx/SearchBox.jsx',
+            'public/js/jsx/Chat.jsx',
+            'public/js/jsx/ShareBox.jsx',
+            'public/js/jsx/Notifications.jsx',
+            'public/js/jsx/InitStream.jsx'
+        ]
+    )
+    .pipe(babel({"presets": ["@babel/preset-react"]}))
     .pipe(concat('react.js'))
     .pipe(gulp.dest('public/js/'))
 });
@@ -40,19 +58,18 @@ gulp.task('react', function() {
 gulp.task('compress-js', function(){
     return gulp.src(
         [
-            "bower_components/highlightjs/highlight.pack.min.js",
-            "bower_components/jquery/dist/jquery.min.js",
-            "bower_components/jquery-textcomplete/dist/jquery.textcomplete.min.js",
-            "bower_components/bootstrap-css/js/bootstrap.min.js",
-            "bower_components/react/react.min.js",
-            "bower_components/react/react-dom.min.js",
+            "node_modules/highlight.js/lib/highlight.js",
+            "node_modules/jquery/dist/jquery.min.js",
+            "node_modules/jquery-textcomplete/dist/jquery.textcomplete.min.js",
+            "node_modules/bootstrap/dist/js/bootstrap.min.js",
+            "node_modules/react/umd/react.development.js",
+            "node_modules/react-dom/umd/react-dom.development.js",
             "public/js/main.js",
             "public/js/react.js"
         ]
     )
      .pipe(uglify())
      .pipe(concat('app.js'))
-     .pipe(gzip())
      .pipe(gulp.dest('public/js/'))
           
 
@@ -66,9 +83,9 @@ gulp.task('sass', function () {
 
 gulp.task('compress-css', function(){
 
-    return gulp.src(['bower_components/fontawesome/css/font-awesome.min.css',  
-                     'bower_components/bootstrap-css/css/bootstrap.min.css', 
-                     'bower_components/highlightjs/styles/railscasts.css',
+    return gulp.src(['node_modules/font-awesome/css/font-awesome.css',  
+                     'node_modules/bootstrap/dist/css//bootstrap.min.css', 
+                     'node_modules/highlight.js/styles/qtcreator_dark.css',
                      'public/css/dmdn.css'])
     .pipe(concat('style.min.css'))
     .pipe(cssmin())
