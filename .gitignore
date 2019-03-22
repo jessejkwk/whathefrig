@@ -4,3 +4,4 @@ public/upload
 node_modules
 vendor
 bin
+composer.lock
